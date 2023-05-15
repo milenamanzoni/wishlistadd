@@ -1,0 +1,140 @@
+<style>
+    .micuentaChup {
+        background: #ec6761;
+        padding: 15px 30px;
+        border-radius: 3px;
+        color: white;
+        text-transform: uppercase;
+        font-size: 17px;
+    }
+    @media (max-width: 976px) {
+        .micuentaChup {
+            padding: 10px;
+            font-size: 0px;
+        }
+        .header-container.layout3 .header-right .header-top-setting {
+            padding: 0px !important;
+        }
+    }
+</style>
+<div class="header-container layout3 layout4">
+    <div class="topbar hidden-xs hidden-sm">
+        <div class="container-max">
+            <div class="flex-layout">
+                <?php echo $this->getChildHtml("topbar-introduce-store"); ?>
+            </div>
+        </div>
+    </div>
+    <div class="header">
+        <div class="container-max">
+            <div class="for-full-withmenu flex-layout">
+
+                <div class="col-logo">
+                    <?php echo $this->getChildHtml("logo"); ?>
+                </div>
+                <?php echo $this->getChildHtml("topSearch"); ?>
+                <div class="header-right">
+                    <!--
+                    <div class="language-currency">
+						<div class="container-setting-language-currency">
+							<?php echo $this->getChildHtml("currency"); ?>
+							<?php echo $this->getChildHtml("store_language"); ?>
+						</div>
+					</div>
+					-->
+
+                    <div class="header-top-setting">
+                        <a href="#" class="actions-top">
+                            <div data-block="minicart" class="minicart-wrapper">
+                                <?php if(!$this->helper('Rokanthemes\Themeoption\Helper\Data')->isLoggedIn()): ?>
+                                <a class="action trigger-auth-popup" href="#" data-action="ajax-popup-login">
+                                    <span class="cart-header micuentaChup">
+                                        <i class="icon-user"></i>
+                                        <?php echo __('Ingresar');?>
+                                    </span>
+                                </a>
+                                <?php else:?>
+                                    <div class="header-top-setting hidden-xs hidden-sm">
+                                        <a class="action  actions-top" href="#" >
+                                            <span class="cart-header micuentaChup">
+                                                <i class="icon-user"></i>
+                                                <?php echo __('Mi cuenta');?>
+                                            </span>
+                                        </a>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                        </a>
+                        <div class="setting-container">
+                            <div class="register-login visible-md visible-lg">
+                                <?php if($this->helper('Rokanthemes\Themeoption\Helper\Data')->isLoggedIn()): ?>
+                                    <a class="optionsuser account" href="<?php echo $this->getUrl('customer/account/index');?>"><?php echo __('Dashboard');?></a>
+                                    <a class="optionsuser logout" href="<?php echo $this->getUrl('customer/account/logout');?>"> <?php echo __('Desconectar');?></a>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </div>
+                    <?php echo $this->getChildHtml("minicart");?>
+
+                </div>
+            </div>
+        </div>
+        <!--
+		<div class="header-menu">
+			<div class="container-max">
+				<div class="flex-layout">
+					<?php echo $this->getChildHtml("vertical.topnav")?>
+					<?php echo $this->getChildHtml("top.navigation.sections"); ?>
+					<div class="holine hidden-xs hidden-sm"><?php echo $this->getChildHtml("holine-number"); ?></div>
+				</div>
+			</div>
+		</div>
+		-->
+    </div>
+</div>
+<?php if($this->helper('Rokanthemes\Themeoption\Helper\Themeconfig')->isEnableStickyHeader()){ ?>
+    <script type="text/javascript">
+        window.Trengo = window.Trengo || {};
+        window.Trengo.key = 'sZVLN8Y5o6gv82mPI1Op';
+        (function(d, script, t) {
+            script = d.createElement('script');
+            script.type = 'text/javascript';
+            script.async = true;
+            script.src = 'https://cdn.widget.trengo.eu/embed.js';
+            d.getElementsByTagName('head')[0].appendChild(script);
+        }(document));
+    </script>
+    <script type="text/javascript">
+        require(['jquery'],function($){
+            $(document).ready(function($){
+                if($('body').hasClass('accountlanding-account-specialorders')){
+                    $("body").removeClass();
+                    $("body").addClass('outstock-page-preloader account sales-order-history page-layout-2columns-left-custom preloaded');
+
+                }
+
+                $("#reclamo").click(function(){
+                     $("body").addClass("modalOpen");
+                     $("#devolutionPopup").show();
+
+                });
+                 $(".close").click(function(){
+                     $("#devolutionPopup").hide();
+                });
+                $(window).scroll(function() {
+                    var num = $('.header-container').outerHeight();
+                    var screenWidth = $(window).width();
+
+                    if ($(this).scrollTop() > num && screenWidth >= 768 ){    
+                        $(".header").addClass("sticky");
+                    }
+                    else{
+                        $(".header").removeClass("sticky");
+                    }
+                });
+            });
+        });
+
+    </script>
+<?php } ?>
+

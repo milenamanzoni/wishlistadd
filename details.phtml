@@ -1,0 +1,1184 @@
+
+<?php include '/var/www/html/chupaprecios/app/code/Chupaprecios/ProductSearch/Controller/Search/WishlistAdd.php';?>
+<?php $test = true; ?>
+<?php $product = $block->getData('product'); ?>
+<?php if ($product): ?>
+    <?php $mainSku = $block->getData('mainSku') ?>
+    <?php $baseUrl = $block->getData('baseUrl') ?>
+    <?php $hasVariants = $block->getData('hasVariants') ?>
+    <?php $title = $product->_title;//strlen($product->_title) > 70 ? substr($product->_title, 0, 70) . "..." : $product->_title?>
+    <?php $placeholderImage = $block->getData('placeholderImage') ?>
+    <?php $mainOfferId = $product->offer_id ?>
+    <?php $variantsLabels = $block->getData('variantsLabels'); ?>
+
+    <?php
+    if (!$product->_main_image) {
+        $product->_main_image = $placeholderImage;
+    }
+    ?>
+    <div class="container">
+        <div class="breadcrumbs">
+            <!--
+               /**
+                * Copyright © Magento, Inc. All rights reserved.
+                * See COPYING.txt for license details.
+                */
+               -->
+            <ul class="items">
+                <li class="item home">
+                    <a href="<?= $block->escapeHtml($block->getBaseUrl()) ?>" title="Go to Home Page">Home</a>
+                </li>
+                <li class="item product">
+                    <strong><?php echo $title ?></strong>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <main id="maincontent" class="page-main container">
+        <div data-role="loader" class="loading-mask" style="position: absolute;">
+            <div class="loader">
+                <img src="/static/version1619706767/frontend/Magento/luma/es_ES/images/loader-1.gif" alt="Loading..."
+                     title="Loading..." style="position: absolute;">
+            </div>
+        </div>
+        <a id="contentarea" tabindex="-1"></a>
+        <div class="page messages">
+            <div data-placeholder="messages"></div>
+            <div data-bind="scope: 'messages'">
+                <!-- ko if: cookieMessages && cookieMessages.length > 0 --><!-- /ko -->
+                <!-- ko if: messages().messages && messages().messages.length > 0 --><!-- /ko -->
+            </div>
+        </div>
+        <div class="columns layout layout-1-col row">
+            <div class="col-main column main col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="product-view row">
+                    <div class="col-sm-6 col-xs-12">
+                        <div class="product media">
+                            <a id="gallery-prev-area" tabindex="-1"></a>
+                            <div class="action-skip-wrapper">
+                                <a class="action skip gallery-next-area" href="#gallery-next-area">
+                                    <span>Skip to the end of the images gallery   </span>
+                                </a>
+                            </div>
+                            <?php
+                            $galleryImagesJson = [];
+                            $position = 1;
+
+                            if ($test) {
+                                $product->_images = json_decode($product->_images);
+                                foreach ($product->_images as $image) {
+
+                                    $galleryImagesJson[] = [
+                                        "thumb" => $image->thumb,
+                                        "img" => $image->large,
+                                        "full" => $image->large,
+                                        "caption" => $title,
+                                        "position" => $position,
+                                        "isMain" => true,
+                                        "type" => "image",
+                                        "videoUrl" => null
+                                    ];
+                                    $position++;
+                                }
+                            } else {
+                                foreach ($product->_images as $image) {
+                                    $galleryImagesJson[] = [
+                                        "thumb" => $image["link"],
+                                        "img" => $image["link"],
+                                        "full" => $image["link"],
+                                        "caption" => $title,
+                                        "position" => $position,
+                                        "isMain" => true,
+                                        "type" => "image",
+                                        "videoUrl" => null
+                                    ];
+                                    $position++;
+                                }
+                            }
+
+                            $galleryImagesJson = json_encode($galleryImagesJson);
+                            $magnifier = json_encode([
+                                "fullscreenzoom" => "20",
+                                "top" => "",
+                                "left" => "",
+                                "width" => "",
+                                "height" => "",
+                                "eventType" => "hover",
+                                "enabled" => false
+                            ]);
+
+                            ?>
+                            <div class="gallery-placeholder _block-content-loading"
+                                 data-gallery-role="gallery-placeholder">
+                                <img
+                                    alt="main product photo"
+                                    class="gallery-placeholder__image"
+                                    src="<?= /* @noEscape */
+                                    $product->_main_image ?>"
+                                />
+                            </div>
+                            <script type="text/x-magento-init">
+                     {
+                         "[data-gallery-role=gallery-placeholder]": {
+                             "mage/gallery/gallery": {
+                                 "mixins":["magnifier/magnify"],
+                                 "magnifierOpts": <?= /* @escapeNotVerified */
+                                $magnifier ?>,
+                                 "data": <?= /* @escapeNotVerified */
+                                $galleryImagesJson ?>,
+                                 "options": {
+                                     "nav": "thumbs",
+                                     "loop": true,
+                                     "keyboard": true,
+                                     "arrows":true,
+                                     "allowfullscreen": true,
+                                     "showCaption": false,
+
+                                     "width": 800,
+                                     "thumbwidth": 100
+                                 }
+
+                             }
+                         }
+                     }
+                            </script>
+                            <div class="action-skip-wrapper">
+                                <a class="action skip gallery-prev-area" href="#gallery-prev-area">
+                                    <span>Skip to the beginning of the images gallery    </span>
+                                </a>
+                            </div>
+                            <a id="gallery-next-area" tabindex="-1"></a>
+                        </div>
+
+                        <div class="divEntregaRapida" style="display: flex">
+                            <img class="imgEntregaRapida" src="/pub/media/footer/entrega.png">
+                            <h1 class="entregaRapida">ENTREGA RÁPIDA Y SEGURA</h1>
+                        </div>
+
+                        <div class="medios-de-pago">
+                            <span class="title">MÉTODOS DE PAGO</span>
+                            <div class="line"></div>
+                            <ul>
+                                <li><img class="" src="/pub/media/footer/visa.png" alt="Visa"></li>
+                                <li><img class="" src="/pub/media/footer/master.png" alt="Master"></li>
+                                <li><img class="" src="/pub/media/footer/america.png" alt="American"></li>
+                                <li><img class="" src="/pub/media/footer/paypal.png" alt="Paypal"></li>
+                                <li><img class="" src="/pub/media/footer/oxxo.png" alt="Oxxo"></li>
+                                <li><img class="" src="/pub/media/footer/spe.png" alt="SPE"></li>
+                            </ul>
+                        </div>
+                    </div>
+
+
+                    <div class="col-sm-6 col-xs-12">
+                        <div class="product-info-main">
+                            <div class="page-title-wrapper product">
+                                <h1 class="page-title">
+                                    <span class="base" data-ui-id="page-title-wrapper"
+                                          itemprop="name"><?php echo $title ?></span>
+                                </h1>
+                            </div>
+                            <div class="product-info-stock-sku">
+                                <div class="stock available" title="Availability">
+                                    Estado:
+                                    <?php if (!isset($product->_price) || !$product->_price || !$product->available): ?>
+                                        <span>Sin stock</span>
+                                    <?php else: ?>
+                                        <span>En stock</span>
+                                    <?php endif; ?>
+                                </div>
+                                <div class="product attribute sku">
+                                    <strong class="type">SKU</strong>
+                                    <div class="value" itemprop="sku">
+                                        <?php echo $product->getSku() ?>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="product-info-price">
+                                <div class="price-box price-final_price" data-role="priceBox" data-product-id="105"
+                                     data-price-box="product-id-105">
+                        <span class="normal-price">
+                           <span class="price price-container price-final_price tax weee"
+                                 style=" color: black; font-weight: bold; font-size: 32px; " itemprop="offers"
+                                 itemscope="" itemtype="http://schema.org/Offer">
+                              <span class="price-label">As low as</span>
+                              <span id="product-price-105" data-price-amount="100" data-price-type="finalPrice"
+                                    class="price-wrapper ">
+                                  <?php
+                                  $price = 0;
+                                  $oldPrice = 0;
+                                  if (isset($product->_price) && $product->_price) {
+                                      if (isset($product->_disscount) && $product->_disscount) {
+                                          $price = $product->_disscount;
+                                          $price = number_format((float)$price, 2, '.', '');
+                                          $oldPrice = $product->_price;
+                                      } else {
+                                          $price = $product->_price;
+                                          $oldPrice = 0;
+                                      }
+                                  }
+                                  ?>
+                                  <?php if ($oldPrice): ?>
+                                      <span class="price" style=" color: #666; font-weight: bold; ">
+                                 &nbsp; MX$&nbsp;
+                                 </span style=" color: black; font-weight: bold; ">
+                                      <span class="total-price-detail total-price-detail-old"
+                                            style="text-decoration: line-through;color: #666;">
+                                    <?php echo $oldPrice ?>
+                                 </span>
+                                  <?php endif; ?>
+                                  <?php if ($price): ?>
+                                      <span class="price" style=" color: black; font-weight: bold; ">
+                                 &nbsp;MX$&nbsp;
+                                 </span style=" color: black; font-weight: bold; ">
+                                  <?php endif; ?>
+                                 <span class="total-price-detail">
+                                 <?php echo $price ?>
+                                 </span>
+                                 </span>
+                              </span>
+                           </span>
+                                    <meta itemprop="price" content="100">
+                                    <meta itemprop="priceCurrency" content="USD">
+
+                                    <div id="descriptionTab" class="tabDescription"
+                                         style="color:black; font-family: 'Barlow', sans-serif !important;font-style: normal;font-weight: 400;font-size: 20px;display: grid !important;grid-template-columns: 1fr auto !important;align-items: center !important;border: 0.5px solid #848484;margin-top: 20px;margin-bottom: 10px;border-left: none !important;border-right: none !important;"
+                                         onclick="toggleDescripcion()">
+                                        <span style="margin-left:10px; padding-top: 5px; padding-bottom: 5px;">Descripción de Producto</span>
+                                        <span id="descripcion-toggle" class="descripcionSimbolo"
+                                              style="justify-self: end !important;font-size:20px!important;margin-right: 10px;"
+                                              onclick="toggleDescripcion()">-</span>
+                                    </div>
+                                    <div class="product attribute overview show" onclick="event.stopPropagation();">
+                                        <div itemprop="description" class="value">
+                                            <p style="max-height: 200px; background-color: white; overflow: scroll;"><?php echo $product->_description ?></p>
+                                        </div>
+                                    </div>
+                                    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                                    <script>
+                                        function toggleDescripcion() {
+                                            var descripcionToggle = document.getElementById("descripcion-toggle");
+                                            var descripcionOverview = document.querySelector(".product.attribute.overview");
+                                            if (descripcionOverview.classList.contains("show")) {
+                                                descripcionOverview.classList.remove("show");
+                                                descripcionOverview.classList.add("hide");
+                                                descripcionToggle.textContent = "+";
+                                            } else {
+                                                descripcionOverview.classList.remove("hide");
+                                                descripcionOverview.classList.add("show");
+                                                descripcionToggle.textContent = "-";
+                                            }
+                                        }
+                                    </script>
+
+
+                                    <div class="product-add-form">
+                                        <form
+                                            action="<?= $block->escapeHtml($block->getBaseUrl()) ?>checkout/cart/add/uenc/aHR0cDovL2NodXBhcHJlY2lvcy5sb2NhbC9lbjEvbmtlY291cnQtYWlyLmh0bWw%2C/product/105/"
+                                            method="post" id="product_addtocart_form" novalidate="novalidate">
+                                            <input type="hidden" name="product" value="105">
+                                            <input type="hidden" name="selected_configurable_option" value="">
+                                            <input type="hidden" name="related_product" id="related-products-field"
+                                                   value="">
+                                            <input name="form_key" type="hidden"
+                                                   valeplue="<?= $block->escapeHtml($block->getFormKey()) ?>">
+
+                                            <div class="product-options-wrapper" id="product-options-wrapper"
+                                                 data-hasrequired="* Required Fields">
+                                                <?php foreach ($product->_attributes as $attribute) : ?>
+                                                    <div class="field configurable required">
+                                                        <label class="label" for="attribute138">
+                                                            <span><?php echo $attribute ?></span>
+                                                        </label>
+                                                        <div class="control">
+                                                            <select
+                                                                id="<?php echo preg_replace('/\s+/', '_', $attribute); ?>"
+                                                                class="super-attribute-select">
+                                                                <?php //foreach($a as $as) :?>
+                                                                <?php //endforeach; ?>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                <?php endforeach; ?>
+                                            </div>
+                                            <div class="product-options-bottom">
+                                                <div class="box-tocart">
+                                                    <div class="fieldset">
+                                                        <div class="field qty">
+                                                            <a class="qty-down-fixed-onclick qty-down" href="#"><span
+                                                                    class="icon-chevron-left"></span></a>
+                                                            <div class="control">
+                                                                <input type="number" name="qty" id="qty" maxlength="12"
+                                                                       value="1" title="Quantity" class="input-text qty"
+                                                                       data-validate="{&quot;required-number&quot;:true,&quot;validate-item-quantity&quot;:{&quot;minAllowed&quot;:1,&quot;maxAllowed&quot;:10000}}">
+                                                            </div>
+                                                            <a class="qty-up-fixed-onclick qty-up" href="#"><span
+                                                                    class="icon-chevron-right"></span></a>
+                                                        </div>
+                                                        <div class="actions">
+
+                                                            <div id="instant-purchase"
+                                                                 data-bind="scope:'instant-purchase'">
+                                                                <!-- ko template: getTemplate() -->
+                                                                <!-- ko if: showButton() --><!-- /ko -->
+                                                                <!-- /ko -->
+                                                            </div>
+                                                        </div>
+                                                        <?php $customBlock = $this->getLayout()->createBlock('Chupaprecios\ProductSearch\Block\Search');
+                                                        /*if ($customBlock->isCustomerLoggedIn()) {
+                                                            $wishlistcollection = $customBlock->getWishlistCollection();
+                                                            //if (count($wishlistcollection) && in_array($product->getSku(), $wishlistcollection)) {*/ ?>
+
+                                                        <?php //} else{ ?>
+                                                        <div class="btnProductPage" style="display: inline-flex;">
+                                                            <a href="#" id="<?= $block->escapeHtml($product->getSku()) ?>" class="action tocotizar btnCotizarProducto">Cotizar producto</a>
+                                                            <a href="#" id="<?= $block->escapeHtml($product->getSku()) ?>" class="action towishlist custom_wishlist">
+                                                                <i class="icon-heart"></i>
+                                                            </a>
+                                                            <?php if(!$this->helper('Rokanthemes\Themeoption\Helper\Data')->isLoggedIn()): ?>
+                                                                <div id="popup-modal" style="display:none">
+                                                                    <div class="header">
+                                                                        <h2 class="modal-title">Iniciar sesión</h2>
+                                                                    </div>
+                                                                    <div class="body">
+                                                                        <p>Por favor inicia sesión para agregar productos a tu lista de favoritos.</p>
+                                                                    </div>
+                                                                    <div class="actions">
+                                                                        <a class="action primary" href="<?php echo $this->getUrl('customer/account/login'); ?>">Iniciar sesión</a>
+                                                                        <a class="action secondary" href="#" onclick="jQuery('#popup-modal').modal('closeModal');">Cancelar</a>
+                                                                    </div>
+                                                                </div>
+                                                            <?php endif; ?>
+                                                        </div>
+
+                                                        <script>
+                                                            require([
+                                                                'jquery',
+                                                                'Magento_Ui/js/modal/modal',
+                                                            ], function ($, modal) {
+                                                                var options = {
+                                                                    type: 'popup',
+                                                                    responsive: true,
+                                                                    innerScroll: true,
+                                                                    title: 'Iniciar sesión',
+                                                                    buttons: []
+                                                                };
+                                                                var popup = modal(options, $('#popup-modal'));
+
+                                                                $('.towishlist').on('click', function() {
+                                                                    var isLoggedIn = '<?php echo $this->helper('Rokanthemes\Themeoption\Helper\Data')->isLoggedIn(); ?>';
+                                                                    if (isLoggedIn) {
+                                                                        var asin = $(this).attr('id');
+                                                                        $.ajax({
+                                                                            url: '<?php echo $block->getUrl("custom/wishlist/addToWishlist"); ?>',
+                                                                            data: {'asin': asin},
+                                                                            dataType: 'json',
+                                                                            type: 'POST',
+                                                                            success: function(response) {
+                                                                                if (response.result) {
+                                                                                    alert(response.message);
+                                                                                } else {
+                                                                                    alert(response.message);
+                                                                                }
+                                                                            }
+                                                                        });
+                                                                    } else {
+                                                                        popup.openModal();
+                                                                    }
+                                                                });
+                                                            });
+                                                        </script>
+
+                                                        <button type="submit" title="Add to cart"
+                                                                class="action primary tocart"
+                                                                id="product-addtocart-button" <?php echo (!isset($product->_price) || !$product->_price || !$product->available) ? "disabled='disabled'" : "" ?>>
+                                                            <span><i class="fa fa-shopping-bag"></i> Agregar al carrito</span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+
+                                                <script>
+                                                    var currentProduct = '<?php echo str_replace('\"', '\\\"', str_replace('\'', '\\\'', json_encode($product))); ?>';
+                                                    currentProduct = currentProduct.replaceAll('\\&', "\&");
+                                                    currentProduct = currentProduct.replaceAll('\n', "\\n");
+
+                                                    currentProduct = JSON.parse(currentProduct);
+                                                    var variantsLabels = '<?php echo $variantsLabels ?>';
+                                                    var productsFinded = [];
+                                                    var allVariantsloaded = [];
+                                                    require([
+                                                        'jquery',
+                                                    ], function ($) {
+
+                                                        jQuery("#btn-minicart-close").click(function () {
+                                                            jQuery("body").click()
+                                                        });
+                                                        jQuery('.tab.description').click(function () {
+                                                            jQuery(".product.attribute.overview").toggle()
+                                                        });
+
+                                                        $.ajaxSetup({
+                                                            converters: {
+                                                                "text json": function (textValue) {
+                                                                    return jQuery.parseJSON(textValue.replace(/(^|[^\\])\\'/g, "$1'"));
+                                                                }
+                                                            }
+                                                        });
+
+                                                        var variantsSelecteds = false;
+                                                        var productSelected = false;
+                                                        var hasVariants = '<?php echo ($hasVariants) ? 1 : 0 ?>';
+
+                                                        var attributes = JSON.parse('<?php echo json_encode($product->_attributes) ?>');
+
+                                                        if (!attributes.length) {
+                                                            hasVariants = '0';
+                                                        }
+
+                                                        if (hasVariants === '0') {
+                                                            productSelected = {}
+                                                            productSelected.asin = '<?php echo $product->getSku() ?>';
+                                                            variantsSelecteds = true;
+                                                        }
+
+
+                                                        var options = [];
+                                                        var products = [];
+                                                        for (var x = 0; x < attributes.length; x++) {
+                                                            options[attributes[x]] = [];
+                                                            options[attributes[x]].selected = null;
+                                                            options[attributes[x]].options = [];
+                                                            options[attributes[x]].html = '<option value="">Elige una opcion...</option>';
+                                                        }
+                                                        <?php
+                                                        $skus = [];
+                                                        $skus_variants = $product->getVariants();
+
+                                                        if ($test) {
+                                                            if ($skus_variants) {
+                                                                if (isset($this->_result->variants[0]->dimensionValuesDisplayData)) {
+                                                                    foreach ($skus_variants[0]->dimensionValuesDisplayData as $asin => $s) {
+                                                                        $skus[] = $asin;
+                                                                    }
+                                                                }
+                                                            }
+                                                        } else {
+                                                            foreach ($skus_variants as $s) {
+                                                                $skus[] = $s["asin"];
+                                                            }
+                                                        }
+
+
+
+
+                                                        $skus = implode(",", $skus);
+
+
+                                                        ?>
+
+                                                        if (variantsLabels) {
+                                                            variantsLabels = variantsLabels.replaceAll('\\&', "\&");
+                                                            variantsLabels = JSON.parse(variantsLabels);
+                                                        }
+
+                                                        for (var i in variantsLabels) {
+                                                            var coptions = variantsLabels[i];
+                                                            var optionsHtml = "<option>SELECCIONAR</option>";
+                                                            for (var x in coptions) {
+                                                                let topt = coptions[x];
+                                                                topt = topt.replaceAll('"', '&quot;');
+                                                                topt = topt.replaceAll("'", "&#39;");
+                                                                optionsHtml += "<option value='" + topt + "'>" + coptions[x] + "</option>";
+                                                            }
+
+                                                            if (i == 'Style' || i == 'style') {
+                                                                i = 'Estilo';
+                                                            }
+
+                                                            var coption = i;
+                                                            coption = coption.replaceAll(" ", "_");
+                                                            $("select#" + coption).html(optionsHtml);
+                                                        }
+
+                                                        $(".loading-mask").hide();
+
+                                                        function resetFields(fieldId) {
+                                                            var find = false;
+                                                            $(".fieldset-selects select").each(function () {
+                                                                var currentId = $(this).attr("id");
+                                                                if (find) {
+                                                                    $(this).val($("#" + currentId + " option:first").val());
+                                                                    //$(this).prop("disabled", false);
+                                                                }
+
+                                                                if (currentId == fieldId) {
+                                                                    find = true;
+                                                                }
+                                                            })
+                                                        }
+
+                                                        function inArray(array, element) {
+                                                            return array.includes(element);
+                                                        }
+
+                                                        function getObjKey(obj, value) {
+                                                            var find = null;
+                                                            for (var i = 0; i < Object.keys(obj).length; i++) {
+
+                                                                if ((
+                                                                        obj[i].name == value) ||
+                                                                    (value == 'Estilo' && obj[i].name == 'Style') ||
+                                                                    (value == 'Tamaño' && obj[i].name == 'Size')
+                                                                ) {
+                                                                    find = obj[i];
+
+                                                                    if (find.name == 'Style') {
+                                                                        find.name = 'Estilo';
+                                                                    } else if (find.name == 'Size') {
+                                                                        find.name = 'Tamaño';
+                                                                    }
+
+                                                                    break;
+                                                                }
+
+                                                            }
+
+                                                            return find;
+                                                        }
+
+                                                        $(".super-attribute-select").change(function () {
+
+                                                            var valueSelected = $(this).val();
+                                                            var id = $(this).attr("id");
+                                                            resetFields(id);
+                                                            productSelected = false;
+                                                            var selecteds = true;
+                                                            var optSelecteds = [];
+                                                            var optSelected = null;
+                                                            variantsSelecteds = false;
+
+                                                            for (var x = 0; x < attributes.length; x++) {
+                                                                if (id == attributes[x].replaceAll(" ", "_")) {
+                                                                    options[attributes[x]].selected = valueSelected;
+                                                                    optSelected = attributes[x];
+                                                                }
+
+                                                                if (!options[attributes[x]].selected) {
+                                                                    productSelected = false;
+                                                                    selecteds = false;
+                                                                } else {
+                                                                    optSelecteds.push({
+                                                                        name: attributes[x],
+                                                                        value: options[attributes[x]].selected
+                                                                    });
+                                                                }
+                                                            }
+                                                            /**/
+                                                            var products_valid = [];
+
+                                                            var optionsValids = [];
+                                                            for (var i = 0; i < attributes.length; i++) {
+                                                                optionsValids[attributes[i]] = [];
+                                                            }
+
+                                                            for (var i = 0; i < Object.keys(currentProduct._variants[0].dimensionValuesDisplayData).length; i++) {
+                                                                if (typeof currentProduct._variants[0].asinVariationValues !== "undefined") {
+                                                                    var t1 = currentProduct._variants[0].asinVariationValues[Object.keys(currentProduct._variants[0].asinVariationValues)[i]];
+                                                                    product_variant_specifics_object = [];
+                                                                    for (var m = 0; m < Object.keys(t1).length; m++) {
+                                                                        if (Object.keys(t1)[m] != 'ASIN') {
+
+                                                                            for (var n = 0; n < Object.keys(currentProduct._variants[0].variationValues).length; n++) {
+                                                                                if (Object.keys(currentProduct._variants[0].variationValues)[n] == Object.keys(t1)[m]) {
+                                                                                    let tval = currentProduct._variants[0].variationValues[Object.keys(currentProduct._variants[0].variationValues)[n]][[t1[Object.keys(t1)[m]]]];
+                                                                                    let tn = currentProduct._variants[0].variationDisplayLabels[Object.keys(t1)[m]]
+                                                                                    if (tn == "Size") {
+                                                                                        tn = "Tamaño";
+                                                                                    } else if (tn == "Style" || tn == "style") {
+                                                                                        tn = "Estilo";
+                                                                                    }
+                                                                                    product_variant_specifics_object.push({
+                                                                                        k: Object.keys(t1)[m],
+                                                                                        value: tval,
+                                                                                        name: tn
+                                                                                    });
+                                                                                    break;
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                } else {
+                                                                    var tmp = currentProduct._variants[0].dimensionValuesDisplayData[Object.keys(currentProduct._variants[0].dimensionValuesDisplayData)[i]];
+
+                                                                    var product_variant_specifics_object = [];
+
+                                                                    for (var ii = 0; ii < Object.keys(variantsLabels).length; ii++) {
+                                                                        product_variant_specifics_object.push({
+                                                                            name: Object.keys(variantsLabels)[ii],
+                                                                            value: tmp[ii]
+                                                                        });
+                                                                    }
+                                                                }
+                                                                /**/
+
+                                                                var valid = true;
+                                                                for (var a = 0; a < optSelecteds.length; a++) {
+
+                                                                    var localObj = getObjKey(product_variant_specifics_object, optSelecteds[a].name)
+
+                                                                    if (localObj.value != optSelecteds[a].value) {
+                                                                        valid = false;
+                                                                    }
+                                                                }
+
+                                                                if (valid) {
+                                                                    products_valid.push(products[i]);
+                                                                    for (var prop in product_variant_specifics_object) {
+                                                                        prop = product_variant_specifics_object[prop].name;
+                                                                        //if (Object.prototype.hasOwnProperty.call(product_variant_specifics_object, prop)) {
+                                                                        var finded = getObjKey(product_variant_specifics_object, prop);
+                                                                        if (finded) {
+                                                                            if (optionsValids[prop].indexOf(finded.value) === -1) {
+                                                                                optionsValids[prop].push(finded.value);
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+
+                                                            for (var i = 0; i < attributes.length; i++) {
+                                                                if (!optionsValids[attributes[i]].length) {
+                                                                    //jQuery("#"+attributes[i].replaceAll(" ", "_") + " option").css("color", "#7b7b7b");
+                                                                } else {
+                                                                    //jQuery("#"+attributes[i].replaceAll(" ", "_") + " option").css("color", "#BCBCBC");
+                                                                    //jQuery("#"+attributes[i].replaceAll(" ", "_") + " option:first").css("color", "#7b7b7b");
+                                                                }
+
+                                                            }
+
+                                                            for (var i = 0; i < attributes.length; i++) {
+                                                                enable = false;
+
+                                                                jQuery("#" + attributes[i].replaceAll(" ", "_") + " option").each(function () {
+                                                                    for (var x = 0; x < optionsValids[attributes[i]].length; x++) {
+                                                                        if ($(this).val() == optionsValids[attributes[i]][x]) {
+                                                                            $(this).prop("disabled", false);
+                                                                        }
+                                                                    }
+                                                                });
+
+                                                            }
+
+                                                            jQuery("#" + optSelected.replaceAll(" ", "_") + " option").prop("disabled", false);
+
+                                                            if (selecteds) {
+                                                                variantsSelecteds = true;
+                                                                //var product_variant_specifics_object = currentProduct._variants[i].dimensions;
+                                                                var option_selecteds = [];
+                                                                $("#product-options-wrapper select option:selected").each(function () {
+                                                                    option_selecteds.push($(this).val())
+                                                                })
+
+                                                                for (var i = 0; i < Object.keys(currentProduct._variants[0].dimensionValuesDisplayData).length; i++) {
+                                                                    var finded = true;
+
+                                                                    var variants = currentProduct._variants[0].dimensionValuesDisplayData[Object.keys(currentProduct._variants[0].dimensionValuesDisplayData)[i]]
+                                                                    for (var z in option_selecteds) {
+                                                                        var elementExists = inArray(variants, option_selecteds[z]);
+                                                                        if (!elementExists) {
+                                                                            finded = false;
+                                                                            break;
+                                                                        }
+                                                                    }
+
+                                                                    if (finded) {
+
+
+                                                                        productSelected = {
+                                                                            asin: Object.keys(currentProduct._variants[0].dimensionValuesDisplayData)[i],
+                                                                        };
+
+                                                                        $(".loading-mask").show();
+                                                                        $.post("<?php echo $baseUrl ?>productsearch/variants/details/sku/" + productSelected.asin, {skus: '<?php echo($skus)?>'}, function (data) {
+                                                                            productSelected = data;
+                                                                            productsFinded.push(productSelected);
+
+
+                                                                            console.log("finded price: " + data.price);
+
+                                                                            $(".loading-mask").hide();
+
+                                                                            if (productSelected.disscount) {
+                                                                                let tmpPrice = productSelected.disscount + "";
+                                                                                if (tmpPrice.indexOf(".") !== -1) {
+                                                                                    tmpPrice = tmpPrice.split(".");
+                                                                                    productSelected.disscount = tmpPrice[0] + "." + tmpPrice[1].substring(0, 2);
+                                                                                }
+                                                                                $("span.total-price-detail").text(productSelected.disscount);
+                                                                                $("span.total-price-detail-old").text(productSelected.price);
+                                                                            } else {
+                                                                                $("span.total-price-detail").text(productSelected.price);
+                                                                            }
+                                                                            $("#product-addtocart-button").attr("disabled", false);
+                                                                            $(".message-in-stock").hide();
+                                                                            $(".product.attribute.sku .value").text(productSelected.asin);
+
+                                                                            var source = [];
+
+                                                                            var tmp_images = JSON.parse(productSelected.images);
+                                                                            for (var itImage = 0; itImage < tmp_images.length; itImage++) {
+                                                                                var isMain = false;
+
+                                                                                if (itImage === 0) {
+                                                                                    isMain = true;
+                                                                                }
+
+                                                                                var img = tmp_images[itImage];
+                                                                                var title = productSelected.title;
+                                                                                source.push({
+                                                                                    "thumb": img.thumb,
+                                                                                    "img": img.large,
+                                                                                    "full": img.large,
+                                                                                    "caption": title,
+                                                                                    "position": itImage + 1,
+                                                                                    "isMain": isMain,
+                                                                                    "type": "image",
+                                                                                    "videoUrl": null
+                                                                                });
+                                                                            }
+
+                                                                            if (source) {
+
+                                                                                var $fotoramaDiv = jQuery('.fotorama').fotorama();
+
+                                                                                // 2. Get the API object.
+                                                                                var fotorama = $fotoramaDiv.data('fotorama');
+
+                                                                                fotorama.load(source);
+
+                                                                                /*fotorama.resize({
+                                                                                    width: 500,
+                                                                                    minwidth:300,
+                                                                                    maxwidth:450,
+                                                                                    height:700,
+                                                                                    minheight:700,
+                                                                                    maxheight:750,
+                                                                                });*/
+
+                                                                                jQuery(".product.attribute.overview div p").text(productSelected.description);
+                                                                                jQuery(".page-title span").text(productSelected.title);
+                                                                            }
+                                                                        });
+
+                                                                        //$(".price span").text(productSelected.price);
+                                                                        break;
+                                                                    } else {
+                                                                        $("#product-addtocart-button").attr("disabled", true);
+                                                                        $(".message-in-stock").show();
+                                                                    }
+                                                                }
+                                                            }
+                                                        });
+
+                                                        $("#product-addtocart-button").click(function (e) {
+                                                            e.preventDefault();
+
+                                                            if (!variantsSelecteds) {
+                                                                alert("Seleccione las variantes");
+                                                                return false;
+                                                            }
+
+                                                            if (productSelected) {
+                                                                $("#product-addtocart-button").attr("disabled", true);
+                                                                $(".loading-mask").show();
+                                                                console.log("agrego al carrito el producto");
+                                                                console.log(productSelected);
+
+                                                                var counter = jQuery(".showcart .counter-number").text()
+
+                                                                var interval = setInterval(checkCart, 500); // 2000 ms = start after 2sec
+
+                                                                function checkCart() {
+                                                                    var tmpCounter = jQuery(".showcart .counter-number").text();
+                                                                    if (counter != tmpCounter) {
+                                                                        $(".loading-mask").hide();
+                                                                        $("#product-addtocart-button").attr("disabled", false);
+                                                                        jQuery(".showcart").click();
+                                                                        clearInterval(interval);
+                                                                        setTimeout(function () {
+                                                                            jQuery("#btn-minicart-close").click();
+                                                                        }, 3000)
+                                                                    }
+                                                                }
+
+                                                                if (productSelected.offer_id == null) {
+                                                                    productSelected.offer_id = "<?php echo $mainOfferId ?>";
+                                                                }
+
+                                                                $.ajax({
+                                                                    type: "post",
+                                                                    url: "<?php echo $baseUrl ?>productsearch/cart/add",
+                                                                    dataType: "json",
+                                                                    data: {
+                                                                        sku: productSelected.asin,
+                                                                        offer_id: productSelected.offer_id,
+                                                                        qty: $("#qty").val(),
+                                                                        mainSku: '<?php echo $mainSku ?>'
+                                                                    },
+                                                                    success: function (response) {
+                                                                        if (response.success) {
+
+                                                                        }
+                                                                        setTimeout(function () {
+                                                                            $(".loading-mask").hide();
+                                                                            $("#product-addtocart-button").attr("disabled", false);
+                                                                        }, 1000);
+                                                                    },
+                                                                    fail: function (response) {
+                                                                        setTimeout(function () {
+                                                                            $(".loading-mask").hide();
+                                                                        }, 1000);
+                                                                        $("#product-addtocart-button").attr("disabled", false);
+                                                                    }
+                                                                })
+                                                            } else {
+                                                                console.log("nop");
+                                                            }
+
+                                                        });
+                                                        //<![CDATA[
+                                                        //]]>
+
+                                                    });
+                                                </script>
+                                                <script>
+                                                    require([
+                                                        'jquery',
+                                                        'mage/mage',
+                                                        'Magento_Catalog/product/view/validation',
+                                                        'Magento_Catalog/js/catalog-add-to-cart'
+                                                    ], function ($) {
+                                                        'use strict';
+                                                        $('#product_addtocart_form').mage('validation', {
+                                                            radioCheckboxClosest: '.nested',
+                                                            submitHandler: function (form) {
+                                                                var widget = $(form).catalogAddToCart({
+                                                                    bindSubmit: false
+                                                                });
+
+                                                                widget.catalogAddToCart('submitForm', $(form));
+
+                                                                return false;
+                                                            }
+                                                        });
+                                                    });
+                                                </script>
+                                                <script>
+                                                    require([
+                                                        'jquery',
+                                                        'mage/mage',
+                                                        'Magento_Catalog/product/view/validation',
+                                                        'Magento_Catalog/js/catalog-add-to-cart'
+                                                    ], function ($) {
+                                                        'use strict';
+                                                        var number_click = 1;
+                                                        $(".qty-down-fixed-onclick").click(function () {
+                                                            var val_input = $(this).closest('div.field').find('#qty').val();
+                                                            val_input = parseInt(val_input);
+                                                            if (val_input <= number_click) {
+                                                                val_input = number_click;
+                                                            } else {
+                                                                val_input = val_input - number_click;
+                                                            }
+                                                            $('div.field div.control #qty').val(val_input);
+                                                            return false;
+                                                        });
+                                                        $(".qty-up-fixed-onclick").click(function () {
+                                                            var val_input = $(this).closest('div.field').find('#qty').val();
+                                                            val_input = parseInt(val_input);
+                                                            val_input = val_input + number_click;
+                                                            $('div.field div.control #qty').val(val_input);
+                                                            return false;
+                                                        });
+                                                    });
+                                                </script>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="short-action">
+                                        <div class="short-content">
+                                        </div>
+                                    </div>
+                                    <div class="product-social-links">
+                                        <div class="product-addto-links" data-role="add-to-links">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <input name="form_key" type="hidden" value="D2O1mUJrqUhpg4Vm">
+                        <div id="authenticationPopup" data-bind="scope:'authenticationPopup', style: {display: 'none'}"
+                             style="display: none;">
+                            <script>
+                                window.authenticationPopup = {
+                                    "autocomplete": "off",
+                                    "customerRegisterUrl": "<?php echo $baseUrl ?>customer\/account\/create\/",
+                                    "customerForgotPasswordUrl": "<?php echo $baseUrl ?>customer\/account\/forgotpassword\/",
+                                    "baseUrl": "<?php echo $baseUrl ?>"
+                                }
+                            </script>    <!-- ko template: getTemplate() -->
+                            <!-- /ko -->
+                        </div>
+                        <script>
+                            require([
+                                'jquery',
+                                'mage/mage',
+                                'quickview/cloudzoom',
+                                'quickview/bxslider'
+                            ], function ($) {
+                            });
+                        </script>
+                        <?php
+                        $productdata = get_object_vars($product);
+                        if (isset($productdata["_also_bought"]) && !empty($productdata["_also_bought"])) { ?>
+                            <div class="recomended-container">
+                                <?php
+                                $recomended = array();
+                                $recomended = $productdata["_also_bought"][0]; ?>
+                                <div class="rokan-product-heading rokan-featured-heading">
+                                    <h2><?= $block->escapeHtml(_('Other people also bought')) ?></h2></div>
+                                <?php
+                                $rows = 1;
+                                ?>
+                                <div class="row recomended-products">
+                                    <ul class="owl">
+                                        <?php $_collectionSize = count($recomended) ?>
+                                        <?php $i = 0;
+                                        foreach ($recomended as $item): ?>
+                                            <?php if ($i % $rows == 0) echo "<li class='item featuredproductslider-item'>"; ?>
+
+                                            <div class="product-item">
+                                                <?php
+                                                if (isset($item['image'])) {
+                                                    $productImage = $item['image'];
+                                                } else {
+                                                    $productImage = $placeholderImage;
+                                                } ?>
+                                                <a href="<?php echo '/productsearch/details/index/sku/' . $item['asin'] ?>"
+                                                   class="product photo product-item-photo" tabindex="-1">
+                                                    <img src="<?= $block->escapeHtml($productImage) ?>">
+                                                </a>
+                                                <strong class="product name product-item-name">
+                                                    <a class="product-item-link"
+                                                       href="<?php echo '/productsearch/details/index/sku/' . $item['asin'] ?>">
+                                                        <?= $block->escapeHtml($item['title']) ?>
+                                                    </a>
+                                                </strong>
+                                                <?php if (isset($item['rating'])) { ?>
+                                                    <div class="product-reviews-summary" itemprop="aggregateRating"
+                                                         itemscope="" itemtype="http://schema.org/AggregateRating">
+                                                        <div class="rating-summary">
+                                                            <span
+                                                                class="label"><span><?= $block->escapeHtml(_('Rating:')) ?></span></span>
+                                                            <div class="rating-result" title="73%">
+                                                                <?php $ratingWidth = ($item['rating'] / 5) * 100; ?>
+                                                                <span
+                                                                    style="width:<?= $block->escapeHtml($ratingWidth) ?>%">
+                                                             <span>
+                                                                 <span
+                                                                     itemprop="ratingValue"><?= $block->escapeHtml($ratingWidth) ?></span>% of <span
+                                                                     itemprop="bestRating">100</span>
+                                                             </span>
+                                                         </span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="reviews-actions">
+                                                            <a class="action view"
+                                                               href="<?php echo '/productsearch/details/index/sku/' . $item['asin'] ?>#reviews">
+                                                                <span
+                                                                    itemprop="reviewCount"><?= $block->escapeHtml($item['ratings_total']) ?></span>&nbsp;
+                                                                <span>Comentarios</span>
+                                                            </a>
+
+                                                        </div>
+                                                    </div>
+                                                <?php } ?>
+                                                <?php if (isset($item['price']['value'])) {
+                                                    $price = $block->getMexicanPrice($item['price']['value']); ?>
+                                                    <span data-price-amount="<?= $block->escapeHtml($price['total']) ?>"
+                                                          data-price-type="finalPrice" class="price-wrapper "><span
+                                                            class="price">MX$ <?= $block->escapeHtml($price['total']) ?></span></span>
+                                                <?php } ?>
+                                                <div class="addlinks">
+                                                    <div class="product-more more-button">
+                                                        <a class="more-info-link"
+                                                           href="<?php echo '/productsearch/details/index/sku/' . $item['asin'] ?>"
+                                                           title="<?= $block->escapeHtml($item['title']) ?>">Mas
+                                                            info...</a>
+                                                    </div>
+                                                </div>
+                                                <?php $i++; ?>
+                                            </div>
+                                            <?php if ($i % $rows == 0) echo "</li>"; ?>
+                                        <?php endforeach; ?>
+                                        <?php if ($i % $rows != 0) echo "</li>"; ?>
+                                    </ul>
+                                </div>
+                                <script>
+                                    require([
+                                        'jquery',
+                                        'mage/mage',
+                                        'rokanthemes/owl'
+                                    ], function ($) {
+                                        'use strict';
+
+                                        jQuery(".recomended-products .owl").owlCarousel({
+                                            autoPlay: false,
+                                            items: 4,
+                                            itemsDesktop: [1199, 4],
+                                            itemsDesktopSmall: [980, 3],
+                                            itemsTablet: [768, 2],
+                                            itemsMobile: [479, 1],
+                                            slideSpeed: 500,
+                                            paginationSpeed: 500,
+                                            rewindSpeed: 500,
+                                            navigation: true,
+                                            stopOnHover: true,
+                                            pagination: false,
+                                            scrollPerPage: true,
+                                        });
+                                    });
+                                </script>
+                            </div>
+                        <?php } elseif (isset($productdata["_also_viewed"]) && !empty($productdata["_also_viewed"])) { ?>
+                            <div class="alsoviewed-container">
+                                <?php
+                                $also_viewed = array();
+                                $also_viewed = $productdata["_also_viewed"][0]; ?>
+                                <div class="rokan-product-heading rokan-featured-heading">
+                                    <h2><?= $block->escapeHtml(_('You may also like')) ?></h2></div>
+                                <?php
+                                $rows = 1;
+                                ?>
+                                <div class="row alsoviewed-products">
+                                    <ul class="owl">
+                                        <?php $_collectionSize = count($also_viewed) ?>
+                                        <?php $i = 0;
+                                        foreach ($also_viewed as $item): ?>
+                                            <?php if ($i % $rows == 0) echo "<li class='item featuredproductslider-item'>"; ?>
+
+                                            <div class="product-item">
+                                                <?php
+                                                if (isset($item['image'])) {
+                                                    $productImage = $item['image'];
+                                                } else {
+                                                    $productImage = $placeholderImage;
+                                                } ?>
+                                                <a href="<?php echo '/productsearch/details/index/sku/' . $item['asin'] ?>"
+                                                   class="product photo product-item-photo" tabindex="-1">
+                                                    <img src="<?= $block->escapeHtml($productImage) ?>">
+                                                </a>
+                                                <strong class="product name product-item-name">
+                                                    <a class="product-item-link"
+                                                       href="<?php echo '/productsearch/details/index/sku/' . $item['asin'] ?>">
+                                                        <?= $block->escapeHtml($item['title']) ?>
+                                                    </a>
+                                                </strong>
+                                                <?php if (isset($item['rating'])) { ?>
+                                                    <div class="product-reviews-summary" itemprop="aggregateRating"
+                                                         itemscope="" itemtype="http://schema.org/AggregateRating">
+                                                        <div class="rating-summary">
+                                                            <span
+                                                                class="label"><span><?= $block->escapeHtml(_('Rating:')) ?></span></span>
+                                                            <div class="rating-result" title="73%">
+                                                                <?php $ratingWidth = ($item['rating'] / 5) * 100; ?>
+                                                                <span
+                                                                    style="width:<?= $block->escapeHtml($ratingWidth) ?>%">
+                                                             <span>
+                                                                 <span
+                                                                     itemprop="ratingValue"><?= $block->escapeHtml($ratingWidth) ?></span>% of <span
+                                                                     itemprop="bestRating">100</span>
+                                                             </span>
+                                                         </span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="reviews-actions">
+                                                            <a class="action view"
+                                                               href="<?php echo '/productsearch/details/index/sku/' . $item['asin'] ?>#reviews">
+                                                                <span
+                                                                    itemprop="reviewCount"><?= $block->escapeHtml($item['ratings_total']) ?></span>&nbsp;
+                                                                <span>Comentarios</span>
+                                                            </a>
+
+                                                        </div>
+                                                    </div>
+                                                <?php } ?>
+                                                <?php if (isset($item['price'])) {
+                                                    $price = $block->getMexicanPrice($item['price']['value']); ?>
+                                                    <span data-price-amount="<?= $block->escapeHtml($price['total']) ?>"
+                                                          data-price-type="finalPrice" class="price-wrapper "><span
+                                                            class="price">MX$ <?= $block->escapeHtml($price['total']) ?></span></span>
+                                                <?php } ?>
+                                                <div class="addlinks">
+                                                    <div class="product-more more-button">
+                                                        <a class="more-info-link"
+                                                           href="<?php echo '/productsearch/details/index/sku/' . $item['asin'] ?>"
+                                                           title="<?= $block->escapeHtml($item['title']) ?>">Mas
+                                                            info...</a>
+                                                    </div>
+                                                </div>
+                                                <?php $i++; ?>
+                                            </div>
+                                            <?php if ($i % $rows == 0) echo "</li>"; ?>
+                                        <?php endforeach; ?>
+                                        <?php if ($i % $rows != 0) echo "</li>"; ?>
+                                    </ul>
+                                </div>
+                                <script>
+                                    require([
+                                        'jquery',
+                                        'mage/mage',
+                                        'rokanthemes/owl'
+                                    ], function ($) {
+                                        'use strict';
+
+                                        jQuery(".alsoviewed-products .owl").owlCarousel({
+                                            autoPlay: false,
+                                            items: 4,
+                                            itemsDesktop: [1199, 4],
+                                            itemsDesktopSmall: [980, 3],
+                                            itemsTablet: [768, 2],
+                                            itemsMobile: [479, 1],
+                                            slideSpeed: 500,
+                                            paginationSpeed: 500,
+                                            rewindSpeed: 500,
+                                            navigation: true,
+                                            stopOnHover: true,
+                                            pagination: false,
+                                            scrollPerPage: true,
+                                        });
+                                    });
+                                </script>
+                            </div>
+                        <?php } ?>
+                    </div>
+                </div>
+    </main>
+<?php else: ?>
+<?php endif ?>
+<?php $wishlisturl = $block->getUrl('productsearch/search/wishlistadd'); ?>
+<script type="text/x-magento-init">
+   {
+       "*": {
+           "Chupaprecios_ProductSearch/js/wishlist": {
+               "AjaxWishlistUrl": "<?php echo $wishlisturl; ?>"
+           }
+       }
+   }
+
+</script>
+<div id='wishlist_popup' style='display: none;' class='wish_popup'></div>
+<!--  -->
+
